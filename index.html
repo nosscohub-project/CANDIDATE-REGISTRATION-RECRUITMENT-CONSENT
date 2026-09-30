@@ -160,10 +160,9 @@
 </div>
 
 <script>
-// ---- CONFIG: paste your GitHub PAT (fine-grained, public_repo scope) ----
-const GITHUB_TOKEN = 'ghp_PASTE_YOUR_TOKEN_HERE';
-const REPO = 'nosscohub-project/CANDIDATE-REGISTRATION-RECRUITMENT-CONSENT';
-// ------------------------------------------------------------------------
+// ---- CONFIG: paste your Google Apps Script Web App URL ----
+const SHEET_URL = 'https://script.google.com/macros/s/PASTE_SCRIPT_ID/exec';
+// -----------------------------------------------------------
 
 function getFormData() {
   return {
@@ -215,78 +214,40 @@ function getFormData() {
 function submitForm() {
   const data = getFormData();
 
-  // Validate required
   if (!data.candidate.name || !data.candidate.email) {
     alert('Please fill in at least Candidate Name and Email.');
     return;
   }
 
-  const title = `[New Registration] ${data.candidate.name} — ${data.position.title || 'N/A'}`;
-  const body = `## Candidate Registration\n\n` +
-    `**Registration No:** ${data.registrationNo}  \n` +
-    `**Date:** ${data.date}  \n` +
-    `**Submitted:** ${new Date(data.submittedAt).toLocaleString()}  \n\n` +
-    `### Candidate Info\n` +
-    `- **Name:** ${data.candidate.name}\n` +
-    `- **Nationality:** ${data.candidate.nationality}\n` +
-    `- **DOB:** ${data.candidate.dob}\n` +
-    `- **Mobile:** ${data.candidate.mobile}\n` +
-    `- **Email:** ${data.candidate.email}\n` +
-    `- **Location:** ${data.candidate.location}\n` +
-    `- **Job Title:** ${data.candidate.jobTitle}\n` +
-    `- **Experience:** ${data.candidate.experience} yrs\n` +
-    `- **Qualification:** ${data.candidate.qualification}\n\n` +
-    `### Position Applied\n` +
-    `- **Position:** ${data.position.title}\n` +
-    `- **Preferred Location:** ${data.position.preferredLocation}\n` +
-    `- **Expected Salary:** ${data.position.expectedSalary}\n` +
-    `- **Availability:** ${data.position.availability}\n\n` +
-    `### Documents\n` +
-    `- CV: ${data.documents.cv ? '✓' : '✗'} | Passport/ID: ${data.documents.passport ? '✓' : '✗'} | ` +
-    `Qualification: ${data.documents.qualification ? '✓' : '✗'} | Experience: ${data.documents.experience ? '✓' : '✗'}` +
-    `${data.documents.other ? ' | Other: ' + data.documents.other : ''}\n\n` +
-    `### Declaration\n` +
-    `- **Candidate Name:** ${data.declaration.name}\n` +
-    `- **Signature:** ${data.declaration.signature}\n` +
-    `- **Date:** ${data.declaration.date}\n\n` +
-    `### Admin\n` +
-    `- **Candidate ID:** ${data.admin.candidateId}\n` +
-    `- **Recruiter:** ${data.admin.recruiter}\n` +
-    `- **Date Registered:** ${data.admin.dateRegistered}\n` +
-    `- **Screening:** ${data.admin.screeningStatus}\n` +
-    `- **Client Submitted:** ${data.admin.clientSubmitted}\n` +
-    `- **Interview Date:** ${data.admin.interviewDate}\n` +
-    `- **Final Status:** ${data.admin.finalStatus}\n` +
-    `- **Remarks:** ${data.admin.remarks}`;
+  const row = [
+    data.registrationNo, data.date,
+    data.candidate.name, data.candidate.nationality, data.candidate.dob,
+    data.candidate.mobile, data.candidate.email, data.candidate.location,
+    data.candidate.jobTitle, data.candidate.experience, data.candidate.qualification,
+    data.position.title, data.position.preferredLocation, data.position.expectedSalary, data.position.availability,
+    [data.documents.cv, data.documents.passport, data.documents.qualification, data.documents.experience, data.documents.other].filter(Boolean).join(', ') || 'None',
+    data.declaration.name, data.declaration.signature, data.declaration.date,
+    data.admin.candidateId, data.admin.recruiter, data.admin.dateRegistered,
+    data.admin.screeningStatus, data.admin.clientSubmitted, data.admin.interviewDate,
+    data.admin.finalStatus, data.admin.remarks,
+    new Date(data.submittedAt).toLocaleString()
+  ];
 
   const btn = document.querySelector('button');
   btn.disabled = true;
   btn.textContent = 'Submitting...';
 
-  fetch(`https://api.github.com/repos/${REPO}/issues`, {
+  fetch(SHEET_URL, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${GITHUB_TOKEN}`,
-      'Accept': 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ title, body })
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ row })
   })
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
-    })
-    .then(issue => {
-      alert('Registration submitted successfully!\n\n' +
-        `Registration No: ${data.registrationNo}\n` +
-        `Candidate: ${data.candidate.name}\n` +
-        `GitHub Issue #${issue.number}: ${issue.html_url}`);
-      // Optional: reset form
-      // document.querySelector('form').reset();
+    .then(() => {
+      alert('Registration submitted!\n\nRegistration No: ' + data.registrationNo + '\nCandidate: ' + data.candidate.name);
     })
     .catch(err => {
-      alert('Submission failed: ' + err.message + '\n\nCheck your GITHUB_TOKEN in the script.');
+      alert('Submission failed: ' + err.message + '\n\nCheck SHEET_URL in the script.');
     })
     .finally(() => {
       btn.disabled = false;
