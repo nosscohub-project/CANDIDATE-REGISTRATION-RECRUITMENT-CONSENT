@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidate Registration & Recruitment Consent</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; color: #1a1a2e; line-height: 1.6; padding: 20px; }
+  .container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
+  .header { background: linear-gradient(135deg, #0f2744 0%, #1a4b7a 100%); color: #fff; padding: 32px 40px; }
+  .header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+  .header .subtitle { font-size: 0.95rem; opacity: 0.85; }
+  .form-body { padding: 32px 40px; }
+  .section { margin-bottom: 28px; }
+  .section-title { font-size: 1.1rem; font-weight: 700; color: #0f2744; border-bottom: 2px solid #1a4b7a; padding-bottom: 6px; margin-bottom: 16px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .full { grid-column: 1 / -1; }
+  label { display: block; font-size: 0.85rem; font-weight: 600; color: #333; margin-bottom: 4px; }
+  input[type="text"], input[type="date"], input[type="email"], input[type="tel"], select, textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid #cdd5e0; border-radius: 6px; font-size: 0.95rem;
+    background: #fafbfc; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #1a4b7a; box-shadow: 0 0 0 3px rgba(26,75,122,0.12); }
+  .checkbox-group { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 8px; }
+  .checkbox-group label { font-weight: 400; display: flex; align-items: center; gap: 6px; }
+  .checkbox-group input[type="checkbox"] { accent-color: #1a4b7a; width: 16px; height: 16px; }
+  .consent-box { background: #f8f9fb; border: 1px solid #dde3ed; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+  .consent-box p { margin-bottom: 10px; font-size: 0.93rem; }
+  .consent-box ol { padding-left: 20px; margin-bottom: 12px; }
+  .consent-box ol li { font-size: 0.9rem; margin-bottom: 4px; color: #444; }
+  .declaration { font-style: italic; }
+  .sign-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .admin-section { background: #f0f4f8; border: 1px solid #d0d9e6; border-radius: 8px; padding: 20px; margin-top: 20px; }
+  .admin-section .section-title { border-bottom-color: #5a7d9a; color: #2d4a63; }
+  .status-row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .status-row label { font-weight: 400; display: flex; align-items: center; gap: 6px; }
+  .status-row input[type="radio"] { accent-color: #1a4b7a; }
+  button { background: linear-gradient(135deg, #0f2744 0%, #1a4b7a 100%); color: #fff; border: none; padding: 14px 40px; font-size: 1rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
+  button:hover { opacity: 0.92; }
+  button:active { transform: scale(0.98); }
+  .btn-row { text-align: center; margin-top: 24px; }
+  @media (max-width: 640px) {
+    .grid, .grid-3, .sign-grid { grid-template-columns: 1fr; }
+    .header, .form-body { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>CANDIDATE REGISTRATION & RECRUITMENT CONSENT</h1>
+    <div class="subtitle">Registration No.: <span id="regDisplay">__________</span> &nbsp;|&nbsp; Date: <span id="dateDisplay">DD/MM/YYYY</span></div>
+  </div>
+  <div class="form-body">
+
+    <!-- SECTION 1 -->
+    <div class="section">
+      <div class="section-title">1. CANDIDATE INFORMATION</div>
+      <div class="grid">
+        <div class="full"><label>Full Name</label><input type="text" id="candName" placeholder="Full Name"></div>
+        <div><label>Nationality</label><input type="text" id="candNationality" placeholder="Nationality"></div>
+        <div><label>Date of Birth</label><input type="date" id="candDob"></div>
+        <div><label>Mobile Number</label><input type="tel" id="candMobile" placeholder="+XX XXX XXX XXXX"></div>
+        <div><label>Email</label><input type="email" id="candEmail" placeholder="email@example.com"></div>
+        <div><label>Current Location</label><input type="text" id="candLocation" placeholder="City, Country"></div>
+        <div><label>Current Job Title</label><input type="text" id="candJobTitle" placeholder="Job Title"></div>
+        <div><label>Years of Experience</label><input type="text" id="candExp" placeholder="e.g. 5"></div>
+        <div class="full"><label>Highest Qualification</label><input type="text" id="candQual" placeholder="Highest Qualification"></div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section">
+      <div class="section-title">2. POSITION APPLIED FOR</div>
+      <div class="grid">
+        <div class="full"><label>Position</label><input type="text" id="posTitle" placeholder="Position"></div>
+        <div><label>Preferred Location</label><input type="text" id="posLocation" placeholder="Preferred Location"></div>
+        <div><label>Expected Salary</label><input type="text" id="posSalary" placeholder="Expected Salary"></div>
+        <div><label>Availability</label><input type="text" id="posAvailability" placeholder="e.g. Immediate / 2 weeks"></div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section">
+      <div class="section-title">3. CANDIDATE CONSENT</div>
+      <div class="consent-box">
+        <p>I confirm that the information and documents I provide to the Recruitment Company are accurate to the best of my knowledge.</p>
+        <p>I authorize the Recruitment Company to use my information for legitimate recruitment purposes and, where appropriate and legally permitted, to share my professional information with potential employers for recruitment consideration.</p>
+        <p>I understand that:</p>
+        <ol>
+          <li>Registration does not guarantee employment.</li>
+          <li>The final hiring decision is made by the Client/employer.</li>
+          <li>The Recruitment Company may submit my profile to suitable employers.</li>
+          <li>I should provide accurate information concerning my qualifications and experience.</li>
+          <li>Employment terms will be agreed between me and the employer if I am selected.</li>
+          <li>Any required employment, work authorization or government process remains subject to applicable laws and approvals.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section">
+      <div class="section-title">4. DOCUMENTS PROVIDED</div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" id="docCV"> CV / Resume</label>
+        <label><input type="checkbox" id="docPassport"> Passport / ID</label>
+        <label><input type="checkbox" id="docQual"> Qualification certificates</label>
+        <label><input type="checkbox" id="docExp"> Experience certificates</label>
+        <label><input type="checkbox" id="docOther"> Other</label>
+        <input type="text" id="docOtherText" placeholder="Specify" style="flex:1;min-width:150px;">
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section">
+      <div class="section-title">5. DECLARATION</div>
+      <p class="declaration" style="margin-bottom:12px;font-size:0.93rem;">I confirm that I have read and understood this Candidate Registration &amp; Recruitment Consent and voluntarily provide the information for recruitment purposes.</p>
+      <div class="sign-grid">
+        <div><label>Candidate Name</label><input type="text" id="declName" placeholder="Candidate Name"></div>
+        <div><label>Signature</label><input type="text" id="declSig" placeholder="Signature"></div>
+        <div><label>Date</label><input type="date" id="declDate"></div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 - Admin -->
+    <div class="section admin-section">
+      <div class="section-title">FOR RECRUITMENT COMPANY USE</div>
+      <div class="grid">
+        <div><label>Candidate ID</label><input type="text" id="adminId" placeholder="Candidate ID"></div>
+        <div><label>Recruiter</label><input type="text" id="adminRecruiter" placeholder="Recruiter"></div>
+        <div><label>Date Registered</label><input type="date" id="adminDateReg"></div>
+        <div class="full">
+          <label>Screening Status</label>
+          <div class="status-row" style="margin-top:6px;">
+            <label><input type="radio" name="screening" value="Pending"> Pending</label>
+            <label><input type="radio" name="screening" value="Qualified"> Qualified</label>
+            <label><input type="radio" name="screening" value="Not Qualified"> Not Qualified</label>
+          </div>
+        </div>
+        <div><label>Client Submitted</label><input type="text" id="adminClient" placeholder="Date / Client"></div>
+        <div><label>Interview Date</label><input type="date" id="adminInterview"></div>
+        <div class="full">
+          <label>Final Status</label>
+          <div class="status-row" style="margin-top:6px;">
+            <label><input type="radio" name="finalStatus" value="Selected"> Selected</label>
+            <label><input type="radio" name="finalStatus" value="Rejected"> Rejected</label>
+            <label><input type="radio" name="finalStatus" value="Pending"> Pending</label>
+          </div>
+        </div>
+        <div class="full"><label>Remarks</label><textarea id="adminRemarks" rows="3" placeholder="Remarks"></textarea></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" onclick="submitForm()">Submit Registration</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function submitForm() {
+  const data = {
+    registrationNo: document.getElementById('regDisplay').textContent,
+    date: document.getElementById('dateDisplay').textContent,
+    candidate: {
+      name: document.getElementById('candName').value,
+      nationality: document.getElementById('candNationality').value,
+      dob: document.getElementById('candDob').value,
+      mobile: document.getElementById('candMobile').value,
+      email: document.getElementById('candEmail').value,
+      location: document.getElementById('candLocation').value,
+      jobTitle: document.getElementById('candJobTitle').value,
+      experience: document.getElementById('candExp').value,
+      qualification: document.getElementById('candQual').value
+    },
+    position: {
+      title: document.getElementById('posTitle').value,
+      preferredLocation: document.getElementById('posLocation').value,
+      expectedSalary: document.getElementById('posSalary').value,
+      availability: document.getElementById('posAvailability').value
+    },
+    documents: {
+      cv: document.getElementById('docCV').checked,
+      passport: document.getElementById('docPassport').checked,
+      qualification: document.getElementById('docQual').checked,
+      experience: document.getElementById('docExp').checked,
+      other: document.getElementById('docOther').checked ? document.getElementById('docOtherText').value : ''
+    },
+    declaration: {
+      name: document.getElementById('declName').value,
+      signature: document.getElementById('declSig').value,
+      date: document.getElementById('declDate').value
+    },
+    admin: {
+      candidateId: document.getElementById('adminId').value,
+      recruiter: document.getElementById('adminRecruiter').value,
+      dateRegistered: document.getElementById('adminDateReg').value,
+      screeningStatus: document.querySelector('input[name="screening"]:checked')?.value || '',
+      clientSubmitted: document.getElementById('adminClient').value,
+      interviewDate: document.getElementById('adminInterview').value,
+      finalStatus: document.querySelector('input[name="finalStatus"]:checked')?.value || '',
+      remarks: document.getElementById('adminRemarks').value
+    },
+    submittedAt: new Date().toISOString()
+  };
+
+  // Store locally + show confirmation
+  const submissions = JSON.parse(localStorage.getItem('candidateSubmissions') || '[]');
+  submissions.push(data);
+  localStorage.setItem('candidateSubmissions', JSON.stringify(submissions));
+
+  alert('Registration submitted successfully!\n\nRegistration No: ' + data.registrationNo + '\nCandidate: ' + data.candidate.name + '\n\nData saved locally. Open DevTools → Application → LocalStorage to view, or contact admin for export.');
+}
+
+// Auto-fill registration no and date on load
+(function() {
+  const regNo = 'REG-' + Date.now().toString(36).toUpperCase();
+  document.getElementById('regDisplay').textContent = regNo;
+  document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-GB');
+})();
+</script>
+</body>
+</html>
